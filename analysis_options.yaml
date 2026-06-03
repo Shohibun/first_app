@@ -25,6 +25,7 @@ linter:
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
 plugins:
+  # Untuk memperingatkan jika kamu salah menggunakan Riverpod || Refactor otomatis || Mencegah lupa menggunakan ProviderScope
   riverpod_lint: ^latest_version
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

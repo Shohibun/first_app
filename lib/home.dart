@@ -10,9 +10,13 @@ class Home extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(title: const Text("Random Joke Generator")),
+        // SizedBox.expand akan mengisi seluruh ruang yang tersedia
         body: SizedBox.expand(
+          // Consumer digunakan untuk membaca provider dan membangun UI berdasarkan state dari provider tersebut
           child: Consumer(
+            // context adalah BuildContext yang digunakan untuk membangun widget, ref adalah WidgetRef yang digunakan untuk membaca provider, child adalah widget yang tidak berubah saat provider berubah (tidak digunakan disini)
             builder: (context, ref, child) {
+              // ref.watch adalah fungsi untuk membaca provider, jika provider berubah maka widget ini akan dibangun ulang
               final randomJoke = ref.watch(randomJokeProvider);
 
               return Stack(
@@ -27,15 +31,20 @@ class Home extends StatelessWidget {
                       child: LinearProgressIndicator(),
                     ),
 
-                  // Tamplkan joke / loading / error
+                  // Tampilkan joke / loading / error
+                  // AsyncValue adalah tipe data yang digunakan untuk menyimpan state dari provider yang mengembalikan Future atau Stream, AsyncValue memiliki tiga state yaitu data, error, dan loading
                   switch (randomJoke) {
+                    // Jika value tidak null, maka tampilkan joke
                     AsyncValue(:final value?) => SelectableText(
-                      '${value.setup}\n\n${value.punchline}',
+                      // SelectableText digunakan agar kita bisa menyalin teksnya
+                      '${value.setup} \n ${value.punchline}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 24),
                     ),
+                    // Jika error tidak null, maka tampilkan pesan error
                     AsyncValue(error: != null) => const Text(
                       "Error fetching joke",
+                      textAlign: TextAlign.center,
                     ),
                     AsyncValue() => const CircularProgressIndicator(),
                   },
@@ -44,6 +53,7 @@ class Home extends StatelessWidget {
                   Positioned(
                     bottom: 20,
                     child: ElevatedButton(
+                      // Saat ditekan, invalidate provider untuk memanggil API lagi dan mendapatkan joke baru
                       onPressed: () => ref.invalidate(randomJokeProvider),
                       child: const Text("Get another Joke"),
                     ),
